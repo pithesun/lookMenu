@@ -8,7 +8,6 @@ public class MenuItem {
     private String priceStr ;
     private String descStr ;
 
-
     public void setImage(int icon) {
         iconDrawable = icon ;
     }

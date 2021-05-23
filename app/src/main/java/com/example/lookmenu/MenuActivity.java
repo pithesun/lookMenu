@@ -1,19 +1,20 @@
 package com.example.lookmenu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 
 public class MenuActivity extends AppCompatActivity {
     RecyclerView mView = null;
     MenuAdapter mAdapter = null;
-    ArrayList<MenuItem> mList = new ArrayList<MenuItem>();
-    ArrayList<Menu> mList2 = new ArrayList<Menu>();
-
+    ArrayList<MenuItem> mList = new ArrayList<>();
     FirebaseConnection fc;
 
     @Override
@@ -29,27 +30,18 @@ public class MenuActivity extends AppCompatActivity {
         mAdapter = new MenuAdapter(mList);
         mView.setAdapter(mAdapter);
 
-        ///////////////////////////
-        /*잘못된 부분 => 수정 필요 */
-        fc = new FirebaseConnection();
-        mList2 = fc.getMenuForUser();
-        System.out.println(mList2);
-        ///////////////////////////
-
-        addItem(R.drawable.pork_cutlet,
-                "왕돈가스", "4000", "맛있는 돈가스");
-        addItem(R.drawable.sushi,
-                "왕왕", "4000", "맛있는 돈가스");
-        addItem(R.drawable.pork_cutlet,
-                "왕돈가스", "4000", "맛있는 돈가스");
-        addItem(R.drawable.sushi,
-                "왕왕", "4000", "맛있는 돈가스");
-        addItem(R.drawable.pork_cutlet,
-                "왕돈가스", "4000", "맛있는 돈가스");
-        addItem(R.drawable.sushi,
-                "왕왕", "4000", "맛있는 돈가스");
-
-        mAdapter.notifyDataSetChanged();
+        fc = new ViewModelProvider(this).get(FirebaseConnection.class);
+        fc.getMenuForUser().observe(this, menus -> {
+            for( Menu menu : menus) {
+                addItem(R.drawable.pork_cutlet,
+                        menu.name, menu.price, menu.info);
+            }
+            mAdapter.notifyDataSetChanged();
+        });
+        //        addItem(R.drawable.pork_cutlet,
+        //                "왕돈가스", "4000", "맛있는 돈가스");
+        //        addItem(R.drawable.sushi,
+        //                "왕왕", "4000", "맛있는 돈가스");
     }
 
     public void addItem(int icon, String title, String price, String desc) {

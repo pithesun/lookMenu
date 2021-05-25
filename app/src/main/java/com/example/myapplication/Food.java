@@ -32,6 +32,10 @@ public class Food {
 
     String getDescription() {return description;}
 
+    // 가격 수정은 일단 보류
+
+
+
 }
 
 // food category를 추가하는게 어떨까요 한식 중식 양식 일식 등등

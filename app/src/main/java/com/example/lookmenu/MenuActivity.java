@@ -38,6 +38,11 @@ public class MenuActivity extends AppCompatActivity {
             }
             mAdapter.notifyDataSetChanged();
         });
+        fc.getRecommendation().observe(this, recommends -> {
+            for( Menu menu : recommends) {
+               Log.d("MenuActivity", menu.name);
+            }
+        });
         //        addItem(R.drawable.pork_cutlet,
         //                "왕돈가스", "4000", "맛있는 돈가스");
         //        addItem(R.drawable.sushi,

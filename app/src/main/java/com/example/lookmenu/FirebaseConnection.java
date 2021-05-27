@@ -1,6 +1,4 @@
 package com.example.lookmenu;
-
-
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -20,11 +18,15 @@ public class FirebaseConnection extends ViewModel {
     private DatabaseReference db;
     private MutableLiveData<ArrayList<Menu>> menus;
     private MutableLiveData<ArrayList<Menu>> Recommends;
-
+    private ArrayList<Order> user_orderHistory;
+    private RecommendSystem rms;
+    private String userId;
     /* user order history 추가 예정 */
 
     public FirebaseConnection(){
         db = FirebaseDatabase.getInstance().getReference();
+        /* 임시코드 */
+        userId = "user1234";
     }
 
     public LiveData<ArrayList<Menu>> getMenuForUser() {
@@ -36,20 +38,43 @@ public class FirebaseConnection extends ViewModel {
         return menus;
     }
 
-    public LiveData<ArrayList<Menu>> getRecommendation() {
-        if(Recommends == null) {
+    public MutableLiveData<ArrayList<Menu>> getRecommendation() {
+        if(user_orderHistory == null){
+            user_orderHistory = new ArrayList<>();
             Recommends = new MutableLiveData<>();
-            loadRecommends();
+            loadOrderHistory();
         }
         return Recommends;
     }
 
     private void loadRecommends(){
-        /*
-         * Recommendation System에서 계산한 추천 메뉴 가져오기
-         */
+        System.out.println("loadRecommends");
+        if(user_orderHistory != null){
+            rms = new RecommendSystem(user_orderHistory);
+            Recommends.setValue(rms.makeRecommendations());
+        }
     }
+    private void loadOrderHistory(){
+        Log.d(TAG, "loadOrderHistory");
+        db.child("user-orderhis").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
+                        Order order = singleSnapshot.getValue(Order.class);
+                        user_orderHistory.add(order);
+                    }
+                }
+//                System.out.println(Recommends);
+                loadRecommends();
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "loadPost:onCancelled", databaseError.toException());
+            }
+        });
+    }
 
     private void loadMenus() {
         ArrayList<Menu> menuList = new ArrayList<>();
@@ -77,5 +102,4 @@ public class FirebaseConnection extends ViewModel {
     }
 
     /*load reviews 추가 예정*/
-    /*load user history 추가 예정 */
 }

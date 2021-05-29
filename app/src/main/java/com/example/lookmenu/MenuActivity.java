@@ -5,12 +5,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements MenuAdapter.OnMenuListener {
+
+    String TAG = "MenuActivity";
+
     RecyclerView mView = null;
     MenuAdapter mAdapter = null;
     ArrayList<MenuItem> mList = new ArrayList<>();
@@ -26,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
 
         mView.setLayoutManager(manager);
 
-        mAdapter = new MenuAdapter(mList);
+        mAdapter = new MenuAdapter(mList, this);
         mView.setAdapter(mAdapter);
 
         fc = new ViewModelProvider(this).get(FirebaseConnection.class);
@@ -57,5 +63,14 @@ public class MenuActivity extends AppCompatActivity {
         item.setDesc(desc);
 
         mList.add(item);
+    }
+
+    @Override
+    public void onMenuClick(int position) {
+        Log.d(TAG, "onMenuClick: ");
+        MenuItem selectedMenu = mList.get(position);
+        Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
+        intent.putExtra("selectedMenu", selectedMenu);
+        startActivity(intent);
     }
 }

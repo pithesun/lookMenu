@@ -2,7 +2,9 @@ package com.example.lookmenu;
 
 import android.graphics.drawable.Drawable;
 
-public class MenuItem {
+import java.io.Serializable;
+
+public class MenuItem implements Serializable {
     private int iconDrawable ;
     private String titleStr ;
     private String priceStr ;

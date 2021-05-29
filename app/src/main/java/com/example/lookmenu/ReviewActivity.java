@@ -5,12 +5,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
 import java.util.ArrayList;
 
 public class ReviewActivity extends AppCompatActivity {
+
+    String TAG = "ReviewActivity";
 
     RecyclerView mView = null;
     ReviewAdapter mAdapter = null;
@@ -20,6 +23,13 @@ public class ReviewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_review);
+
+        /////////////////////////////////////
+        /* included layout에 값을 넣기 위해 data binding 필요 */
+        Intent intent = getIntent();
+        MenuItem menuItem = (MenuItem) intent.getSerializableExtra("selectedMenu");
+        Log.d(TAG, menuItem.getTitle());
+        ////////////////////////////////////
 
         mView = findViewById(R.id.recycler1);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

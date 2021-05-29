@@ -1,72 +1,54 @@
-package com.example.myapplication;
-import java.util.*;
+package com.example.lookmenu;
 
+import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class RecommendSystem {
 
-    List<Food> userHistory = new ArrayList<Food>();
+    String TAG = "RecommendSystem";
+    List<Order> userOrderHis;
 
-    RecommendSystem(List<Food> history)
+    RecommendSystem(List<Order> history)
     {
-        userHistory = history;
-    } // 기본 선언시 history 받게
+        this.userOrderHis = history;
+    }
 
-    List<Food> makeRecommendations(List<Food> userhistory)
+    ArrayList<Menu> makeRecommendations()
     {
-        // 한식 일식 중식 양식 카테고리별 카운팅
-        int koreanFood = 0;
-        int japaneseFood = 0;
-        int chineseFood = 0;
-        int westernFood = 0;
+        ArrayList<Menu> recommend = new ArrayList<>();
+        HashMap<String, List<Menu>> orderDB = new HashMap<>();
 
-        List<Food> recommend = new ArrayList<Food>();
-        HashMap<String, Integer> orderDB = new HashMap<String, Integer>();
-
-        for(int i=0;i<userhistory.size();i++)
+        for(int i=0; i< this.userOrderHis.size(); i++)
         {
-            String cate = userhistory.get(i).getFood_category();
-
-            switch(cate)
-            {
-                case "한식":
-                    koreanFood++;
-                    break;
-                case "일식":
-                    japaneseFood++;
-                    break;
-                case "중식":
-                    chineseFood++;
-                    break;
-                case "양식":
-                    westernFood++;
-                    break;
+            List<Menu> menus = this.userOrderHis.get(i).getFood();
+            for( Menu menu : menus){
+                Log.d(TAG, menu.name);
+                List<Menu> categoryMenu = orderDB.get(menu.category);
+                if(categoryMenu == null){
+                    categoryMenu = new ArrayList<>();
+                }
+                categoryMenu.add(menu);
+                System.out.println(categoryMenu);
+                orderDB.put(menu.category, categoryMenu);
             }
         }
-        orderDB.put("한식", koreanFood);
-        orderDB.put("중식", chineseFood);
-        orderDB.put("일식", japaneseFood);
-        orderDB.put("양식", westernFood);
 
-        int maxCount = Math.max(koreanFood, chineseFood);
-        maxCount = Math.max(maxCount, japaneseFood);
-        maxCount = Math.max(maxCount, westernFood); // 최대 count
-
-        for(String key : orderDB.keySet())
-        {
-            if(orderDB.get(key)==maxCount) // 최대 값 푸드카테고리 추천메뉴에 add
-            {
-                for(int i=0;i<userhistory.size();i++)
-                {
-                    String cate = userhistory.get(i).getFood_category();
-                    if(cate==key)
-                        recommend.add(userhistory.get(i));
-                }
+        Map.Entry<String, List<Menu>> maxEntry = null;
+        for (Map.Entry<String, List<Menu>> entry : orderDB.entrySet()) {
+            if (maxEntry == null || entry.getValue().size() >= maxEntry.getValue().size()) {
+                maxEntry = entry;
             }
+        }
+
+        if(maxEntry != null && maxEntry.getKey() != null){
+            String maxKey = maxEntry.getKey();
+            recommend.addAll(orderDB.get(maxKey));
         }
 
         return recommend;
-
     }
-
 }

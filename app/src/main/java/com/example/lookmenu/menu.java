@@ -1,48 +1,30 @@
-package com.example.myapplication;
+package com.example.lookmenu;
 
-import java.util.*;
+public class Menu {
+    public String name;
+    public String price;
+    public String info;
+    public String category;
 
-public class menu {
-    List<Food> menus = new ArrayList<Food>(); // food 저장
-    List<Food> recommendedMenus = new ArrayList<Food>(); // 추천 메뉴 저장
-
-    menu(List<Food> _menus, List<Food> _recommendedMenus)
-    {
-        menus = _menus;
-        recommendedMenus = _recommendedMenus;
+    public Menu() {
+        // Default constructor required for calls to DataSnapshot.getValue(Menu.class)
     }
 
-
-    void PrintMenu()
-    {
-      for(int i=0, len = menus.size();i<len;i++)
-      {
-          System.out.println("이름: "+menus.get(i).getFood_name()+"\t가격: "+menus.get(i).getPrice());
-      }
+    public Menu(String price, String name, String info, String category) {
+        this.price = price;
+        this.name = name;
+        this.info = info;
+        this.category = category;
     }
 
-    void PrintRecommendedMenu()
-    {
-        if(recommendedMenus.isEmpty())
-            PrintMenu();
-        else
-        {
-            for(int i=0, len = recommendedMenus.size();i<len;i++)
-            {
-                System.out.println("이름: "+recommendedMenus.get(i).getFood_name()+"\t가격: "+recommendedMenus.get(i).getPrice());
-            }
-        }
+    /* for Debugging */
+    @Override
+    public String toString(){
+        return "name : " + name + " price : " + price + " info : " + info;
     }
 
-    void setRecommendedMenus(List<Food> _recommendedMenus)
+    public String getPrice()
     {
-        recommendedMenus = _recommendedMenus;
+        return price;
     }
-
-    void setMenus(List<Food> _menus)
-    {
-        menus = _menus;
-    }
-
-
 }

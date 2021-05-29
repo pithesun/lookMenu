@@ -14,7 +14,7 @@
 
 ## DB 구조
 
-
+![ex_screenshot](./img/db.png)
 
 
 

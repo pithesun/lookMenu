@@ -1,6 +1,6 @@
 package com.example.lookmenu;
 
-import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,38 +11,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
+public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder> {
 
-    private ArrayList<MenuItem> mData;
+    private ArrayList<ReviewItem> mData;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView menu_image;
-        private TextView menu_title, menu_price, menu_desc;
+        private TextView review_user, review_date, review_content;
 
         public ViewHolder(View view) {
             super(view);
             // Define click listener for the ViewHolder's View
-            menu_image = view.findViewById(R.id.menuImage);
-            menu_title = (TextView) view.findViewById(R.id.menuTitle);
-            menu_price = (TextView) view.findViewById(R.id.menuPrice);
-            menu_desc = (TextView) view.findViewById(R.id.menuDesc);
+            review_user = (TextView) view.findViewById(R.id.review_user);
+            review_date = (TextView) view.findViewById(R.id.review_date);
+            review_content = (TextView) view.findViewById(R.id.review_content);
         }
-
-        public ImageView getImageView() {
-            return menu_image;
+        public TextView getReview_user() { return review_user; }
+        public TextView getReview_date() {
+            return review_date;
         }
-        public TextView getMenu_title() {
-            return menu_title;
-        }
-        public TextView getMenu_price() {
-            return menu_price;
-        }
-        public TextView getMenu_desc() {
-            return menu_desc;
+        public TextView getReview_content() {
+            return review_content;
         }
     }
 
-    public MenuAdapter(ArrayList<MenuItem> list) {
+
+    public ReviewAdapter(ArrayList<ReviewItem> list) {
         mData = list;
     }
 
@@ -51,7 +44,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.menu_item, viewGroup, false);
+                .inflate(R.layout.review_item, viewGroup, false);
 
         return new ViewHolder(view);
     }
@@ -59,13 +52,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        final MenuItem item = mData.get(position) ;
+        final ReviewItem item = mData.get(position) ;
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
-        viewHolder.getImageView().setImageResource(item.getImage());
-        viewHolder.getMenu_title().setText(item.getTitle());
-        viewHolder.getMenu_price().setText(item.getPrice());
-        viewHolder.getMenu_desc().setText(item.getDesc());
+        System.out.println(viewHolder);
+        Log.d("ReviewAdapter", item.getAuthorId() );
+        viewHolder.getReview_user().setText(item.getAuthorId());
+        viewHolder.getReview_date().setText(item.getReviewDate());
+        viewHolder.getReview_content().setText(item.getReviewContent());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

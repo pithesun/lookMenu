@@ -1,7 +1,6 @@
 package com.example.lookmenu;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
         fc = new ViewModelProvider(this).get(FirebaseConnection.class);
         fc.getMenuForUser().observe(this, menus -> {
             for( Menu menu : menus) {
-                addItem(R.drawable.pork_cutlet,
+                addMenuItem(R.drawable.pork_cutlet,
                         menu.name, menu.price, menu.info);
             }
             mAdapter.notifyDataSetChanged();
@@ -49,7 +48,7 @@ public class MenuActivity extends AppCompatActivity {
         //                "왕왕", "4000", "맛있는 돈가스");
     }
 
-    public void addItem(int icon, String title, String price, String desc) {
+    public void addMenuItem(int icon, String title, String price, String desc) {
         MenuItem item = new MenuItem();
 
         item.setImage(icon);

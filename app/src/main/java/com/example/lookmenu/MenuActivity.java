@@ -48,10 +48,6 @@ public class MenuActivity extends AppCompatActivity implements MenuAdapter.OnMen
                Log.d("MenuActivity", menu.name);
             }
         });
-        //        addItem(R.drawable.pork_cutlet,
-        //                "왕돈가스", "4000", "맛있는 돈가스");
-        //        addItem(R.drawable.sushi,
-        //                "왕왕", "4000", "맛있는 돈가스");
     }
 
     public void addMenuItem(int icon, String title, String price, String desc) {

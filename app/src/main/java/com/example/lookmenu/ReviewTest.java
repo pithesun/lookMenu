@@ -10,6 +10,9 @@ public class ReviewTest {
     public String review;
     SimpleDateFormat format1 = new SimpleDateFormat("yyyyMMddHHmmss");
 
+    public ReviewTest(){
+    }
+
     public ReviewTest(String id, String review, String food_name)
     {
         this.userid = id;
@@ -21,12 +24,12 @@ public class ReviewTest {
     }
 
     // 디비에서 review list 넘길때 사용하려고 만든것
-    public ReviewTest(String id, String review, String food_name, String dates)
+    public ReviewTest(String userid, String review, String food_name, String date)
     {
-        this.userid=id;
+        this.userid=userid;
         this.review=review;
         this.food_name=food_name;
-        this.date = dates;
+        this.date = date;
     }
 }
 

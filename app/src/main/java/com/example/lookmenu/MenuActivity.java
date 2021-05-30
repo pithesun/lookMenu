@@ -8,8 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -63,8 +61,8 @@ public class MenuActivity extends AppCompatActivity implements MenuAdapter.OnMen
 
     @Override
     public void onMenuClick(int position) {
-        Log.d(TAG, "onMenuClick: ");
         MenuItem selectedMenu = mList.get(position);
+
         Intent intent = new Intent(getApplicationContext(), ReviewActivity.class);
         intent.putExtra("selectedMenu", selectedMenu);
         startActivity(intent);

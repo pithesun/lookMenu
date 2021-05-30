@@ -1,13 +1,15 @@
 package com.example.lookmenu;
 
-import android.media.Image;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.lookmenu.databinding.MenuItemBinding;
 
 import java.util.ArrayList;
 
@@ -23,6 +25,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
         public ViewHolder(View view, OnMenuListener onMenuListener) {
             super(view);
+
             menu_image = view.findViewById(R.id.menuImage);
             menu_title = (TextView) view.findViewById(R.id.menuTitle);
             menu_price = (TextView) view.findViewById(R.id.menuPrice);
@@ -62,26 +65,22 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     // Create new views (invoked by the layout manager)
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Create a new view, which defines the UI of the list item
+
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.menu_item, viewGroup, false);
-
         return new ViewHolder(view, mOnMenuListener);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
         final MenuItem item = mData.get(position) ;
-        // Get element from your dataset at this position and replace the
-        // contents of the view with that element
+
         viewHolder.getImageView().setImageResource(item.getImage());
         viewHolder.getMenu_title().setText(item.getTitle());
         viewHolder.getMenu_price().setText(item.getPrice());
         viewHolder.getMenu_desc().setText(item.getDesc());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
         return mData.size();

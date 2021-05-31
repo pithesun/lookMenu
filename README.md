@@ -11,33 +11,43 @@
 
 ## 설계 변경 부분 및 적용 패턴
 
-기존 클래스 다이어그램 
+### 기존 클래스 다이어그램 
 ![기존 클래스 다이어그램](./classdiagram.png)
 
-프로그램의 간략한 구조
+### 프로그램의 간략한 구조
 ![간략한 구조](./structure.png)
 
-* view model 
-UI와 UI에 사용되는 데이터 분리
-DB Connection 부분까지 맡게 됨
-
-* Model 
-도메인 모델에 사용되는 데이터 객체 정의
+1. view model 
+    * Controller와 DB connection을 MenuViewModel과 Review View Model로 나누어 개발 <br/>
+    * 장점: Controller의 과도한 집중을 막고 관련 있는 데이터 모델을 모아둠.
+    * 단점: view model에서 DB Connection 부분까지 맡게 됨 
+2. Model 
+    * 도메인 모델에 사용되는 데이터 객체 정의
 
 ### Menu Request
-가짜 코드로 대체
+임의로 유저 아이디 지정
+```
+String userId = "user1234";
+```
 
 ### Review Requst
-String 매개변수로 대체
+String food_name (매개변수)로 대체
+```
+private void retrieveReviews(String food_name){
+
+}
+```
 
 ### Review Page와 Menu Page
-activity_menu.xml과 activity_review.xml
+* activity_menu.xml과 activity_review.xml 
 
-Recycler View로 어댑터 패턴을 사용하여 구현
+### Page Maker
+* page maker 대신 메뉴 페이지와 리뷰 페이지 모두 아이템을 반복해서 보여주기 때문에 Recycler View로 Adapter Pattern을 사용
 ![Recycler view Adapter Patter](./recyclerview.png)
 
 ### Recommendation System
-Singleton으로 구현
+
+* Singleton으로 구현
 (Rcommendation System은 시스템 내 유일하기 때문)
 
 ```

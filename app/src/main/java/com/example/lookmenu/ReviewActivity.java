@@ -45,7 +45,7 @@ public class ReviewActivity extends AppCompatActivity {
 
         fc = new ViewModelProvider(this).get(FirebaseConnection.class);
         fc.getReviews(menuItem.getTitle()).observe(this, reviews -> {
-            for( ReviewTest review : reviews) {
+            for( Review review : reviews) {
                 addReviewItem(review.userid, review.date, review.review);
             }
             mAdapter.notifyDataSetChanged();

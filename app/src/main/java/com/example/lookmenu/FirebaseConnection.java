@@ -18,7 +18,7 @@ public class FirebaseConnection extends ViewModel {
     private DatabaseReference db;
     private MutableLiveData<ArrayList<Menu>> menus;
     private MutableLiveData<ArrayList<Menu>> Recommends;
-    private MutableLiveData<ArrayList<ReviewTest>> selected_reviews; // select된 review 담기 위해
+    private MutableLiveData<ArrayList<Review>> selected_reviews; // select된 review 담기 위해
     private ArrayList<Order> user_orderHistory;
     private RecommendSystem rms;
     private String userId;
@@ -47,7 +47,7 @@ public class FirebaseConnection extends ViewModel {
         return Recommends;
     }
 
-    public MutableLiveData<ArrayList<ReviewTest>> getReviews(String food_name){
+    public MutableLiveData<ArrayList<Review>> getReviews(String food_name){
         if(selected_reviews == null) {
             selected_reviews = new MutableLiveData<>();
             retrieveReviews(food_name);
@@ -114,7 +114,7 @@ public class FirebaseConnection extends ViewModel {
 
     private void retrieveReviews(String food_name) // 이름으로 검색
     {
-        ArrayList<ReviewTest> review_history = new ArrayList<>(); // food_name과 일치하는 review들
+        ArrayList<Review> review_history = new ArrayList<>(); // food_name과 일치하는 review들
 
         db.child("reviews").orderByChild("food_name").equalTo(food_name).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -123,7 +123,7 @@ public class FirebaseConnection extends ViewModel {
                     for (DataSnapshot singleSnapshot : snapshot.getChildren()) {
                         Object review = singleSnapshot.getValue();
                         System.out.print(review);
-                        ReviewTest a = singleSnapshot.getValue(ReviewTest.class);
+                        Review a = singleSnapshot.getValue(Review.class);
                         //System.out.println(order);
                         review_history.add(a);
                     }

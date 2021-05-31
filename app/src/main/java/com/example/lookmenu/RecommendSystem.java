@@ -10,21 +10,22 @@ import java.util.Map;
 public class RecommendSystem {
 
     String TAG = "RecommendSystem";
-    List<Order> userOrderHis;
+    private static final RecommendSystem instance = new RecommendSystem();
 
-    RecommendSystem(List<Order> history)
-    {
-        this.userOrderHis = history;
+    private RecommendSystem(){}
+
+    public static RecommendSystem getInstance(){
+        return instance;
     }
 
-    ArrayList<Menu> makeRecommendations()
+    ArrayList<Menu> makeRecommendations(List<Order> userOrderHis)
     {
         ArrayList<Menu> recommend = new ArrayList<>();
         HashMap<String, List<Menu>> orderDB = new HashMap<>();
 
-        for(int i=0; i< this.userOrderHis.size(); i++)
+        for(int i=0; i< userOrderHis.size(); i++)
         {
-            List<Menu> menus = this.userOrderHis.get(i).getFood();
+            List<Menu> menus = userOrderHis.get(i).getFood();
             for( Menu menu : menus){
                 Log.d(TAG, menu.name);
                 List<Menu> categoryMenu = orderDB.get(menu.category);

@@ -1,4 +1,5 @@
 package com.example.lookmenu;
+
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -13,20 +14,16 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class FirebaseConnection extends ViewModel {
+public class MenuViewModel extends ViewModel {
     private String TAG = "FirebaseConnection";
     private DatabaseReference db;
     private MutableLiveData<ArrayList<Menu>> menus;
     private MutableLiveData<ArrayList<Menu>> Recommends;
-    private MutableLiveData<ArrayList<ReviewTest>> selected_reviews; // select된 review 담기 위해
     private ArrayList<Order> user_orderHistory;
     private RecommendSystem rms;
-    private String userId;
 
-    public FirebaseConnection(){
+    public MenuViewModel(){
         db = FirebaseDatabase.getInstance().getReference();
-        /* 임시코드 */
-        userId = "user1234";
     }
 
     public LiveData<ArrayList<Menu>> getMenuForUser() {
@@ -38,7 +35,7 @@ public class FirebaseConnection extends ViewModel {
         return menus;
     }
 
-    public MutableLiveData<ArrayList<Menu>> getRecommendation() {
+    public MutableLiveData<ArrayList<Menu>> getRecommendation(String userId) {
         if(user_orderHistory == null){
             user_orderHistory = new ArrayList<>();
             Recommends = new MutableLiveData<>();
@@ -47,23 +44,16 @@ public class FirebaseConnection extends ViewModel {
         return Recommends;
     }
 
-    public MutableLiveData<ArrayList<ReviewTest>> getReviews(String food_name){
-        if(selected_reviews == null) {
-            selected_reviews = new MutableLiveData<>();
-            retrieveReviews(food_name);
-        }
-        return selected_reviews;
-    }
-
     private void retrieveRecommends(){
         System.out.println("loadRecommends");
         if(user_orderHistory != null){
-            rms = new RecommendSystem(user_orderHistory);
-            Recommends.setValue(rms.makeRecommendations());
+            rms = RecommendSystem.getInstance();
+            Recommends.setValue(rms.makeRecommendations(user_orderHistory));
         }
     }
 
     private void retrieveMenus() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         ArrayList<Menu> menuList = new ArrayList<>();
 
         db.child("menu").addListenerForSingleValueEvent(new ValueEventListener() {
@@ -90,6 +80,7 @@ public class FirebaseConnection extends ViewModel {
 
     private void search_user_history(String userid)
     {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference();
         db.child("order_history").orderByChild("userid").equalTo(userid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -103,32 +94,6 @@ public class FirebaseConnection extends ViewModel {
                     }
                 }
                 retrieveRecommends();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void retrieveReviews(String food_name) // 이름으로 검색
-    {
-        ArrayList<ReviewTest> review_history = new ArrayList<>(); // food_name과 일치하는 review들
-
-        db.child("reviews").orderByChild("food_name").equalTo(food_name).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot singleSnapshot : snapshot.getChildren()) {
-                        Object review = singleSnapshot.getValue();
-                        System.out.print(review);
-                        ReviewTest a = singleSnapshot.getValue(ReviewTest.class);
-                        //System.out.println(order);
-                        review_history.add(a);
-                    }
-                }
-                selected_reviews.setValue(review_history); // 검색결과 있을시
             }
 
             @Override

@@ -21,7 +21,7 @@ public class ReviewActivity extends AppCompatActivity {
     RecyclerView mView = null;
     ReviewAdapter mAdapter = null;
     ArrayList<ReviewItem> mList = new ArrayList<>();
-    FirebaseConnection fc;
+    ReviewViewModel fc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class ReviewActivity extends AppCompatActivity {
         mAdapter = new ReviewAdapter(mList);
         mView.setAdapter(mAdapter);
 
-        fc = new ViewModelProvider(this).get(FirebaseConnection.class);
+        fc = new ViewModelProvider(this).get(ReviewViewModel.class);
         fc.getReviews(menuItem.getTitle()).observe(this, reviews -> {
             for( ReviewTest review : reviews) {
                 addReviewItem(review.userid, review.date, review.review);

@@ -18,12 +18,13 @@ public class MenuActivity extends AppCompatActivity implements MenuAdapter.OnMen
     RecyclerView mView = null;
     MenuAdapter mAdapter = null;
     ArrayList<MenuItem> mList = new ArrayList<>();
-    FirebaseConnection fc;
+    MenuViewModel fc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+        String userId = "user1234";
 
         mView = findViewById(R.id.recycler1);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -33,15 +34,16 @@ public class MenuActivity extends AppCompatActivity implements MenuAdapter.OnMen
         mAdapter = new MenuAdapter(mList, this);
         mView.setAdapter(mAdapter);
 
-        fc = new ViewModelProvider(this).get(FirebaseConnection.class);
+        fc = new ViewModelProvider(this).get(MenuViewModel.class);
         fc.getMenuForUser().observe(this, menus -> {
+            Log.d(TAG, "onCreate: + getmenuforuser");
             for( Menu menu : menus) {
                 addMenuItem(R.drawable.pork_cutlet,
                         menu.name, menu.price, menu.info);
             }
             mAdapter.notifyDataSetChanged();
         });
-        fc.getRecommendation().observe(this, recommends -> {
+        fc.getRecommendation(userId).observe(this, recommends -> {
             for( Menu menu : recommends) {
                Log.d("MenuActivity", menu.name);
             }
